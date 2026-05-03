@@ -6,65 +6,29 @@ on:
   pull_request:
     branches:
       - main
-env:
-  MONGODB_DB_NAME: mongodb
 jobs:
   test:
-    environment: testing
-    env:
-      MONGODB_CONNECTION_PROTOCOL: mongodb
-      MONGODB_CLUSTER_ADDRESS: mongodb
-      MONGODB_USERNAME: ${{ secrets.MONGODB_USER }}
-      MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
-
-      PORT: 8080
     runs-on: ubuntu-latest
-    # container: 
-    #   image: node:18
-
-    # starting services
-    services:
-      mongodb:
-        image: mongo
-        env:
-          MONGO_INITDB_ROOT_USERNAME: ${{ secrets.MONGODB_USER }}
-          MONGO_INITDB_ROOT_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
-        ports:
-          - 27017:27017
     steps:
-      - name: Get Code
+      - name: getting the code
         uses: actions/checkout@v3
-      - name: Cache dependencies
+      - name: setting up a cache
         uses: actions/cache@v3
         with:
           path: ~/.npm
           key: npm-deps-${{ hashFiles('**/package-lock.json') }}
-      - name: Install dependencies
-        run: npm install
-      - name: Wait for MongoDB
-        run: |
-          for i in {1..15}; do
-            nc -z localhost 27017 && echo "MongoDB is ready" && exit 0
-            echo "Waiting for MongoDB..."
-            sleep 2
-          done
-          echo "MongoDB did not start in time"
-          exit 1
+      - name: installing dependencies
+        run: npm ci
       - name: Run server
-        run: npm start & npx wait-on http://127.0.0.1:$PORT
+        run: npm start & npx wait-on http://127.0.0.1:XYZ
       - name: Run tests
         run: npm test
-        # value showing from repo environment secret
-      - name: Output information
-        run: |
-          echo "MONGODB_USERNAME: ${{ env.MONGODB_USERNAME }}"
-          echo "MONGODB_DBNAME: ${{ env.MONGODB_DB_NAME }}"
+      - name: get output information
+        run: echo "..."
   deploy:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - name: Output information
-        run: |        
-          echo "MONGODB_USERNAME: ${{ env.MONGODB_USERNAME }}"
-          echo "MONGODB_DBNAME: ${{ env.MONGODB_DB_NAME }}"
-          echo "MONGODB_PASSWORD: ${{ env.MONGODB_PASSWORD }}"
+      - name: Get output information
+        run: |
+          echo "..."
