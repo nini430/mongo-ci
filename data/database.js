@@ -5,10 +5,8 @@ const dbUser = process.env.MONGODB_USERNAME;
 const dbPassword = process.env.MONGODB_PASSWORD;
 const dbName = process.env.MONGODB_DB_NAME;
 
-//const uri = `mongodb+srv://${dbUser}:${dbPassword}@${clusterAddress}/?retryWrites=true&w=majority`;
-const uri = `mongodb://${dbUser}:${dbPassword}@localhost:27017/${dbName}authSource=admin&directConnection=true&serverSelectionTimeoutMS=5000`;
-
-const client = new MongoClient(uri);
+const uri = `mongodb+srv://${dbUser}:${dbPassword}@${clusterAddress}/?retryWrites=true&w=majority`;
+let client = new MongoClient(uri);
 
 
 
@@ -25,6 +23,7 @@ try {
   console.log('Ping Successful!');
 
 } catch (error) {
+  console.log(error);
   console.log('Oops! Connection failed.');
   process.exit(1);
 }
