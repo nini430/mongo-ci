@@ -6,8 +6,15 @@ on:
   pull_request:
     branches:
       - main
+env:
+  MONGODB_DB_NAME: mongodb
 jobs:
   test:
+    env:
+      MONGODB_CLUSTER_ADDRESS: 'cluster0.4kwvljg.mongodb.net'
+      MONGODB_USERNAME: nuciellla
+      MONGODB_PASSWORD: mirakula1A!
+      PORT: 8080
     runs-on: ubuntu-latest
     steps:
       - name: getting the code
@@ -20,15 +27,18 @@ jobs:
       - name: installing dependencies
         run: npm ci
       - name: Run server
-        run: npm start & npx wait-on http://127.0.0.1:XYZ
+        run: npm start & npx wait-on http://127.0.0.1:$PORT
       - name: Run tests
         run: npm test
       - name: get output information
-        run: echo "..."
+        run: |
+          echo "MONGODB USERNAME: {{$env.MONGODB_USERNAME}}"
+          echo "MONGODB DB NAME: {{$env.MONGODB_DB_NAME}}"
   deploy:
     needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Get output information
         run: |
-          echo "..."
+          echo "MONGODB USERNAME: {{$env.MONGODB_USERNAME}}"
+          echo "MONGODB DB NAME: {{$env.MONGODB_DB_NAME}}"
