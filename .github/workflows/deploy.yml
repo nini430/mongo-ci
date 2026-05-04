@@ -32,13 +32,13 @@ jobs:
         run: npm test
       - name: get output information
         run: |
-          echo "MONGODB USERNAME: {{ $env.MONGODB_USERNAME }}"
-          echo "MONGODB DB NAME: {{ $env.MONGODB_DB_NAME}}"
+          echo "MONGODB USERNAME: ${{ env.MONGODB_USERNAME }}"
+          echo "MONGODB DB NAME: ${{ env.MONGODB_DB_NAME }}"
   deploy:
     needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Get output information
         run: |
-          echo "MONGODB USERNAME: {{ $env.MONGODB_USERNAME }}"
-          echo "MONGODB DB NAME: {{ $env.MONGODB_DB_NAME }}"
+          echo "MONGODB USERNAME: ${{ env.MONGODB_USERNAME }}"
+          echo "MONGODB DB NAME: ${{ env.MONGODB_DB_NAME }}"
